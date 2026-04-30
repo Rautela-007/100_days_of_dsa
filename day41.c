@@ -1,18 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node {
+struct Node {
     int data;
     struct Node *next;
-} Node;
+};
 
-typedef struct Queue {
-    Node *front;
-    Node *rear;
-} Queue;
+struct Queue {
+    struct Node *front;
+    struct Node *rear;
+};
 
-Node *createNode(int value) {
-    Node *newNode = (Node *)malloc(sizeof(Node));
+struct Node *createNode(int value) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
 
     newNode->data = value;
     newNode->next = NULL;
@@ -20,17 +20,17 @@ Node *createNode(int value) {
     return newNode;
 }
 
-void initializeQueue(Queue *queue) {
+void initializeQueue(struct Queue *queue) {
     queue->front = NULL;
     queue->rear = NULL;
 }
 
-int isEmpty(Queue *queue) {
+int isEmpty(struct Queue *queue) {
     return queue->front == NULL;
 }
 
-void enqueue(Queue *queue, int value) {
-    Node *newNode = createNode(value);
+void enqueue(struct Queue *queue, int value) {
+    struct Node *newNode = createNode(value);
 
     if (isEmpty(queue)) {
         queue->front = newNode;
@@ -41,12 +41,12 @@ void enqueue(Queue *queue, int value) {
     }
 }
 
-int dequeue(Queue *queue) {
+int dequeue(struct Queue *queue) {
     if (isEmpty(queue)) {
         return -1;
     }
 
-    Node *temp = queue->front;
+    struct Node *temp = queue->front;
     int value = temp->data;
 
     queue->front = queue->front->next;
@@ -67,7 +67,7 @@ int isDequeue(char operation[]) {
     return operation[0] == 'd' || operation[0] == 'D' || operation[0] == '2';
 }
 
-void clearQueue(Queue *queue) {
+void clearQueue(struct Queue *queue) {
     while (!isEmpty(queue)) {
         dequeue(queue);
     }
@@ -77,7 +77,7 @@ int main() {
     int n;
     int value;
     char operation[20];
-    Queue queue;
+    struct Queue queue;
 
     initializeQueue(&queue);
 

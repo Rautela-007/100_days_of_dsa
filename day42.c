@@ -1,22 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node {
+struct Node {
     int data;
     struct Node *next;
-} Node;
+};
 
-typedef struct Queue {
-    Node *front;
-    Node *rear;
-} Queue;
+struct Queue {
+    struct Node *front;
+    struct Node *rear;
+};
 
-typedef struct Stack {
-    Node *top;
-} Stack;
+struct Stack {
+    struct Node *top;
+};
 
-Node *createNode(int value) {
-    Node *newNode = (Node *)malloc(sizeof(Node));
+struct Node *createNode(int value) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
 
     newNode->data = value;
     newNode->next = NULL;
@@ -24,25 +24,25 @@ Node *createNode(int value) {
     return newNode;
 }
 
-void initializeQueue(Queue *queue) {
+void initializeQueue(struct Queue *queue) {
     queue->front = NULL;
     queue->rear = NULL;
 }
 
-void initializeStack(Stack *stack) {
+void initializeStack(struct Stack *stack) {
     stack->top = NULL;
 }
 
-int isQueueEmpty(Queue *queue) {
+int isQueueEmpty(struct Queue *queue) {
     return queue->front == NULL;
 }
 
-int isStackEmpty(Stack *stack) {
+int isStackEmpty(struct Stack *stack) {
     return stack->top == NULL;
 }
 
-void enqueue(Queue *queue, int value) {
-    Node *newNode = createNode(value);
+void enqueue(struct Queue *queue, int value) {
+    struct Node *newNode = createNode(value);
 
     if (isQueueEmpty(queue)) {
         queue->front = newNode;
@@ -53,12 +53,12 @@ void enqueue(Queue *queue, int value) {
     }
 }
 
-int dequeue(Queue *queue) {
+int dequeue(struct Queue *queue) {
     if (isQueueEmpty(queue)) {
         return -1;
     }
 
-    Node *temp = queue->front;
+    struct Node *temp = queue->front;
     int value = temp->data;
 
     queue->front = queue->front->next;
@@ -71,19 +71,19 @@ int dequeue(Queue *queue) {
     return value;
 }
 
-void push(Stack *stack, int value) {
-    Node *newNode = createNode(value);
+void push(struct Stack *stack, int value) {
+    struct Node *newNode = createNode(value);
 
     newNode->next = stack->top;
     stack->top = newNode;
 }
 
-int pop(Stack *stack) {
+int pop(struct Stack *stack) {
     if (isStackEmpty(stack)) {
         return -1;
     }
 
-    Node *temp = stack->top;
+    struct Node *temp = stack->top;
     int value = temp->data;
 
     stack->top = stack->top->next;
@@ -92,8 +92,8 @@ int pop(Stack *stack) {
     return value;
 }
 
-void reverseQueue(Queue *queue) {
-    Stack stack;
+void reverseQueue(struct Queue *queue) {
+    struct Stack stack;
     initializeStack(&stack);
 
     // First, move all queue elements into the stack.
@@ -107,8 +107,8 @@ void reverseQueue(Queue *queue) {
     }
 }
 
-void printQueue(Queue *queue) {
-    Node *current = queue->front;
+void printQueue(struct Queue *queue) {
+    struct Node *current = queue->front;
 
     while (current != NULL) {
         printf("%d", current->data);
@@ -123,7 +123,7 @@ void printQueue(Queue *queue) {
     printf("\n");
 }
 
-void clearQueue(Queue *queue) {
+void clearQueue(struct Queue *queue) {
     while (!isQueueEmpty(queue)) {
         dequeue(queue);
     }
@@ -132,7 +132,7 @@ void clearQueue(Queue *queue) {
 int main() {
     int n;
     int value;
-    Queue queue;
+    struct Queue queue;
 
     initializeQueue(&queue);
 

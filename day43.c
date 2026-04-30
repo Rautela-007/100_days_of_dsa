@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node {
+struct Node {
     int data;
     struct Node *left;
     struct Node *right;
-} Node;
+};
 
 int firstValue = 1;
 
-Node *createNode(int data) {
-    Node *newNode = (Node *)malloc(sizeof(Node));
+struct Node *createNode(int data) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
 
     newNode->data = data;
     newNode->left = NULL;
@@ -19,16 +19,16 @@ Node *createNode(int data) {
     return newNode;
 }
 
-Node *buildTree(int arr[], int n) {
+struct Node *buildTree(int arr[], int n) {
     if (n == 0 || arr[0] == -1) {
         return NULL;
     }
 
-    Node *root = createNode(arr[0]);
+    struct Node *root = createNode(arr[0]);
 
     // Queue stores nodes whose children are still to be created.
-    // Node ** means "array of Node pointers".
-    Node **queue = (Node **)malloc(n * sizeof(Node *));
+    // struct Node ** means "array of Node pointers".
+    struct Node **queue = (struct Node **)malloc(n * sizeof(struct Node *));
     int front = 0;
     int rear = 0;
     int i = 1;
@@ -36,7 +36,7 @@ Node *buildTree(int arr[], int n) {
     queue[rear++] = root;
 
     while (front < rear && i < n) {
-        Node *parent = queue[front++];
+        struct Node *parent = queue[front++];
 
         // Next value becomes the left child.
         if (arr[i] != -1) {
@@ -57,7 +57,7 @@ Node *buildTree(int arr[], int n) {
     return root;
 }
 
-void inorder(Node *root) {
+void inorder(struct Node *root) {
     if (root == NULL) {
         return;
     }
@@ -73,7 +73,7 @@ void inorder(Node *root) {
     inorder(root->right);
 }
 
-void freeTree(Node *root) {
+void freeTree(struct Node *root) {
     if (root == NULL) {
         return;
     }
@@ -94,7 +94,7 @@ int main() {
         scanf("%d", &arr[i]);
     }
 
-    Node *root = buildTree(arr, n);
+    struct Node *root = buildTree(arr, n);
 
     inorder(root);
     printf("\n");
