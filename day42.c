@@ -15,12 +15,21 @@ typedef struct Stack {
     Node *top;
 } Stack;
 
-void initQueue(Queue *queue) {
+Node *createNode(int value) {
+    Node *newNode = (Node *)malloc(sizeof(Node));
+
+    newNode->data = value;
+    newNode->next = NULL;
+
+    return newNode;
+}
+
+void initializeQueue(Queue *queue) {
     queue->front = NULL;
     queue->rear = NULL;
 }
 
-void initStack(Stack *stack) {
+void initializeStack(Stack *stack) {
     stack->top = NULL;
 }
 
@@ -33,13 +42,7 @@ int isStackEmpty(Stack *stack) {
 }
 
 void enqueue(Queue *queue, int value) {
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    if (newNode == NULL) {
-        return;
-    }
-
-    newNode->data = value;
-    newNode->next = NULL;
+    Node *newNode = createNode(value);
 
     if (isQueueEmpty(queue)) {
         queue->front = newNode;
@@ -59,6 +62,7 @@ int dequeue(Queue *queue) {
     int value = temp->data;
 
     queue->front = queue->front->next;
+
     if (queue->front == NULL) {
         queue->rear = NULL;
     }
@@ -68,12 +72,8 @@ int dequeue(Queue *queue) {
 }
 
 void push(Stack *stack, int value) {
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    if (newNode == NULL) {
-        return;
-    }
+    Node *newNode = createNode(value);
 
-    newNode->data = value;
     newNode->next = stack->top;
     stack->top = newNode;
 }
@@ -87,18 +87,21 @@ int pop(Stack *stack) {
     int value = temp->data;
 
     stack->top = stack->top->next;
+
     free(temp);
     return value;
 }
 
 void reverseQueue(Queue *queue) {
     Stack stack;
-    initStack(&stack);
+    initializeStack(&stack);
 
+    // First, move all queue elements into the stack.
     while (!isQueueEmpty(queue)) {
         push(&stack, dequeue(queue));
     }
 
+    // Then, move them back. Stack gives values in reverse order.
     while (!isStackEmpty(&stack)) {
         enqueue(queue, pop(&stack));
     }
@@ -109,11 +112,14 @@ void printQueue(Queue *queue) {
 
     while (current != NULL) {
         printf("%d", current->data);
+
         if (current->next != NULL) {
             printf(" ");
         }
+
         current = current->next;
     }
+
     printf("\n");
 }
 
@@ -125,28 +131,22 @@ void clearQueue(Queue *queue) {
 
 int main() {
     int n;
+    int value;
     Queue queue;
 
-    initQueue(&queue);
+    initializeQueue(&queue);
 
-    printf("Enter number of elements: ");
-    if (scanf("%d", &n) != 1) {
-        return 0;
-    }
+    scanf("%d", &n);
 
-    printf("Enter %d elements: ", n);
     for (int i = 0; i < n; i++) {
-        int value;
-        if (scanf("%d", &value) == 1) {
-            enqueue(&queue, value);
-        }
+        scanf("%d", &value);
+        enqueue(&queue, value);
     }
 
     reverseQueue(&queue);
-
-    printf("Reversed queue: ");
     printQueue(&queue);
 
     clearQueue(&queue);
+
     return 0;
 }

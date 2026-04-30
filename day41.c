@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 typedef struct Node {
     int data;
@@ -12,7 +11,16 @@ typedef struct Queue {
     Node *rear;
 } Queue;
 
-void initQueue(Queue *queue) {
+Node *createNode(int value) {
+    Node *newNode = (Node *)malloc(sizeof(Node));
+
+    newNode->data = value;
+    newNode->next = NULL;
+
+    return newNode;
+}
+
+void initializeQueue(Queue *queue) {
     queue->front = NULL;
     queue->rear = NULL;
 }
@@ -22,13 +30,7 @@ int isEmpty(Queue *queue) {
 }
 
 void enqueue(Queue *queue, int value) {
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    if (newNode == NULL) {
-        return;
-    }
-
-    newNode->data = value;
-    newNode->next = NULL;
+    Node *newNode = createNode(value);
 
     if (isEmpty(queue)) {
         queue->front = newNode;
@@ -48,6 +50,7 @@ int dequeue(Queue *queue) {
     int value = temp->data;
 
     queue->front = queue->front->next;
+
     if (queue->front == NULL) {
         queue->rear = NULL;
     }
@@ -56,18 +59,12 @@ int dequeue(Queue *queue) {
     return value;
 }
 
-int isEnqueueOperation(char operation[]) {
-    return strcmp(operation, "enqueue") == 0 ||
-           strcmp(operation, "ENQUEUE") == 0 ||
-           strcmp(operation, "Enqueue") == 0 ||
-           strcmp(operation, "1") == 0;
+int isEnqueue(char operation[]) {
+    return operation[0] == 'e' || operation[0] == 'E' || operation[0] == '1';
 }
 
-int isDequeueOperation(char operation[]) {
-    return strcmp(operation, "dequeue") == 0 ||
-           strcmp(operation, "DEQUEUE") == 0 ||
-           strcmp(operation, "Dequeue") == 0 ||
-           strcmp(operation, "2") == 0;
+int isDequeue(char operation[]) {
+    return operation[0] == 'd' || operation[0] == 'D' || operation[0] == '2';
 }
 
 void clearQueue(Queue *queue) {
@@ -78,34 +75,26 @@ void clearQueue(Queue *queue) {
 
 int main() {
     int n;
+    int value;
+    char operation[20];
     Queue queue;
 
-    initQueue(&queue);
+    initializeQueue(&queue);
 
-    printf("Enter number of operations: ");
-    if (scanf("%d", &n) != 1) {
-        return 0;
-    }
+    scanf("%d", &n);
 
     for (int i = 0; i < n; i++) {
-        char operation[20];
+        scanf("%19s", operation);
 
-        printf("Enter operation %d: ", i + 1);
-        if (scanf("%19s", operation) != 1) {
-            break;
-        }
-
-        if (isEnqueueOperation(operation)) {
-            int value;
-            printf("Enter value to enqueue: ");
-            if (scanf("%d", &value) == 1) {
-                enqueue(&queue, value);
-            }
-        } else if (isDequeueOperation(operation)) {
+        if (isEnqueue(operation)) {
+            scanf("%d", &value);
+            enqueue(&queue, value);
+        } else if (isDequeue(operation)) {
             printf("%d\n", dequeue(&queue));
         }
     }
 
     clearQueue(&queue);
+
     return 0;
 }
